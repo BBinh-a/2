@@ -1,0 +1,22 @@
+function upDate(previewPic) {
+  // 1. Kiểm tra sự kiện
+  console.log("Sự kiện upDate đã được kích hoạt!");
+  
+  // 2. In alt và src ra console
+  console.log("Alt:", previewPic.alt);
+  console.log("Source:", previewPic.src);
+
+  // 3. Thay đổi văn bản của thẻ có id="image"
+  document.getElementById('image').innerHTML = previewPic.alt;
+
+  // 4. Thay đổi hình nền của thẻ có id="image"
+  document.getElementById('image').style.backgroundImage = "url('" + previewPic.src + "')";
+}
+
+function unDo() {
+  // 1. Cập nhật lại hình nền về ban đầu (url(''))
+  document.getElementById('image').style.backgroundImage = "url('')";
+
+  // 2. Cập nhật lại văn bản gốc
+  document.getElementById('image').innerHTML = "Di chuột qua một hình ảnh bên dưới để hiển thị ở đây.";
+}
