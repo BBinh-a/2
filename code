@@ -1,22 +1,152 @@
-function upDate(previewPic) {
-  // 1. Kiểm tra sự kiện
-  console.log("Sự kiện upDate đã được kích hoạt!");
-  
-  // 2. In alt và src ra console
-  console.log("Alt:", previewPic.alt);
-  console.log("Source:", previewPic.src);
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư viện ảnh tương tác</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
 
-  // 3. Thay đổi văn bản của thẻ có id="image"
-  document.getElementById('image').innerHTML = previewPic.alt;
+        #image-display {
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+            margin: 20px auto;
+            background-color: #888;
+            background-size: cover;
+            background-position: center;
+            color: white;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid #333;
+            border-radius: 8px;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.8);
+        }
 
-  // 4. Thay đổi hình nền của thẻ có id="image"
-  document.getElementById('image').style.backgroundImage = "url('" + previewPic.src + "')";
-}
+        .gallery {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            max-width: 800px;
+            margin: 0 auto;
+        }
 
-function unDo() {
-  // 1. Cập nhật lại hình nền về ban đầu (url(''))
-  document.getElementById('image').style.backgroundImage = "url('')";
+        .preview {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 3px solid transparent;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: transform 0.2s, border-color 0.2s;
+        }
 
-  // 2. Cập nhật lại văn bản gốc
-  document.getElementById('image').innerHTML = "Di chuột qua một hình ảnh bên dưới để hiển thị ở đây.";
-}
+        .preview:hover, .preview:focus {
+            transform: scale(1.05);
+            border-color: #007bff;
+            outline: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Thư viện ảnh tương tác</h1>
+    
+    <!-- Khung hiển thị ảnh lớn -->
+    <div id="image-display">Rê chuột hoặc Tab vào một hình ảnh bên dưới.</div>
+
+    <!-- Bộ sưu tập 6 hình ảnh -->
+    <div class="gallery">
+        <img class="preview" 
+             src="https://picsum.photos/id/1018/600/300" 
+             alt="Cảnh núi non hùng vĩ" 
+             onmouseover="upDate(this)" 
+             onmouseleave="unUpdate()" 
+             onfocus="upDate(this)" 
+             onblur="unUpdate()">
+
+        <img class="preview" 
+             src="https://picsum.photos/id/1015/600/300" 
+             alt="Dòng sông chạy qua thung lũng" 
+             onmouseover="upDate(this)" 
+             onmouseleave="unUpdate()" 
+             onfocus="upDate(this)" 
+             onblur="unUpdate()">
+
+        <img class="preview" 
+             src="https://picsum.photos/id/1019/600/300" 
+             alt="Bờ biển thơ mộng chiều hoàng hôn" 
+             onmouseover="upDate(this)" 
+             onmouseleave="unUpdate()" 
+             onfocus="upDate(this)" 
+             onblur="unUpdate()">
+
+        <img class="preview" 
+             src="https://picsum.photos/id/1025/600/300" 
+             alt="Chú chó dễ thương ngồi trên chăn" 
+             onmouseover="upDate(this)" 
+             onmouseleave="unUpdate()" 
+             onfocus="upDate(this)" 
+             onblur="unUpdate()">
+
+        <img class="preview" 
+             src="https://picsum.photos/id/1039/600/300" 
+             alt="Thác nước tự nhiên xanh mát" 
+             onmouseover="upDate(this)" 
+             onmouseleave="unUpdate()" 
+             onfocus="upDate(this)" 
+             onblur="unUpdate()">
+
+        <img class="preview" 
+             src="https://picsum.photos/id/1043/600/300" 
+             alt="Rừng cây mùa thu lá vàng" 
+             onmouseover="upDate(this)" 
+             onmouseleave="unUpdate()" 
+             onfocus="upDate(this)" 
+             onblur="unUpdate()">
+    </div>
+
+    <script>
+        // Hàm cập nhật ảnh lớn và chữ hiển thị
+        function upDate(previewPic) {
+            console.log("Kích hoạt sự kiện upDate/focus cho ảnh:", previewPic.alt);
+            const display = document.getElementById('image-display');
+            display.style.backgroundImage = "url('" + previewPic.src + "')";
+            display.innerHTML = previewPic.alt;
+        }
+
+        // Hàm khôi phục lại trạng thái ban đầu
+        function unUpdate() {
+            console.log("Kích hoạt sự kiện unUpdate/blur");
+            const display = document.getElementById('image-display');
+            display.style.backgroundImage = "url('')";
+            display.innerHTML = "Rê chuột hoặc Tab vào một hình ảnh bên dưới.";
+        }
+
+        // Hàm khởi tạo thêm tabindex cho từng ảnh (Yêu cầu 8 & 9)
+        function initGallery() {
+            console.log("Trang web đã tải xong (onload triggered). Đang thiết lập tabindex...");
+            
+            // Lấy danh sách tất cả các ảnh có class 'preview'
+            const images = document.querySelectorAll('.preview');
+
+            // Vòng lặp for duyệt qua từng ảnh và thêm tabindex="0" (Yêu cầu 9b & 9c)
+            for (let i = 0; i < images.length; i++) {
+                images[i].setAttribute('tabindex', '0');
+            }
+        }
+
+        // Thiết lập sự kiện onload (Yêu cầu 8)
+        window.onload = initGallery;
+    </script>
+</body>
+</html>
